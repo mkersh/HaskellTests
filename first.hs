@@ -107,6 +107,20 @@ perm3 = [(x1,x2,x3,x4,x5,x6,x7,x8)|
     (length (set2' [x1,x2-1,x3-2,x4-3,x5-4,x6-5,x7-6,x8-7] [])) == 8
     ]
 
+-- Although the above look very nice, they are incredibly slow when compared 
+-- even to a language like python
+
+-- Some more list comprehension examples
+
+rightTriangles = [ (a,b,c) | c <- [1..10], b <- [1..c], a <- [1..b], a^2 + b^2 == c^2]  
+
+-- The following types of inferred list comprehension are pretty mind blowing. I've not seen anything
+-- like this is other langauges
+
+list6 = [100,99..1] -- OK so maybe that one is not too clever but ...
+
+list7 = [2,4..100]
+
 -- ************************************************************************************
 -- ********* TUPLES
 
@@ -117,3 +131,24 @@ ans2 = snd pair1
 
 -- zip example
 zip1 = zip [1..] "Hello World. This is me"  
+
+-- ************************************************************************************
+-- ********* FUNCTIONS
+
+-- declaring the type explicitly (considered good practice)
+removeNonUppercase :: [Char] -> [Char]  
+removeNonUppercase st = [ c | c <- st, c `elem` ['A'..'Z']]   
+
+addThree :: Int -> Int -> Int -> Int  
+addThree x y z = x + y + z
+
+-- Generic version
+addThree2 :: (Num a) => a -> a -> a -> a  
+addThree2 x y z = x + y + z
+
+factorial :: Integer -> Integer  
+factorial n = product [1..n]  
+
+
+main = print (perm3)
+
