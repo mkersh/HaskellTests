@@ -314,6 +314,15 @@ sumLists7 l1 l2 =
             (step2.step1)  dataFeed
 
 
+fn1:: [Int] -> Int
+fn1 = head.(map (+2))
+
+fn2:: Int -> Int
+fn2 = (*3)
+
+
+
+
 
 
 
