@@ -306,7 +306,7 @@ sumLists6 l1 l2 =
 sumLists7::(Integral t)=>[t]->[t]->[t]
 sumLists7 l1 l2 =
     let
-        someConst = 3   -- Just testing allowed here as well
+        someConst = 3   -- Just testing allowed here as well 
         dataFeed = zip l1 l2
         step1 = map (\(x,y)->x+y) 
         step2 = map (*someConst)
