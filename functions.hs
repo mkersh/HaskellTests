@@ -123,6 +123,201 @@ firstN xs n =
 -- Thought the below was going to be quick but its not. Its slower than fibSeq2, fibSeq3, fibSeq4 (for n==1000)
 fibSeq5 n = firstN fib3 n
 
+-- ****************************************
+-- Function guards
+
+-- I have already used these above in my fibonnachi experiments but here are some simplified examples to make sure the concept is clear
+
+bmiTell :: (RealFloat a) => a -> String  
+bmiTell bmi  
+    | bmi <= 18.5 = "You're underweight, you emo, you!"  
+    | bmi <= 25.0 = "You're supposedly normal. Pffft, I bet you're ugly!"  
+    | bmi <= 30.0 = "You're fat! Lose some weight, fatty!"  
+    | otherwise   = "You're a whale, congratulations!"  
+
+bmiTell2 :: (RealFloat a) => a -> String  
+
+-- If there is no otherwise guard and none of the other guards match it will move onto the next pattern
+bmiTell2 bmi  
+    | bmi <= 18.5 = "You're underweight, you emo, you!"  
+    | bmi <= 25.0 = "You're supposedly normal. Pffft, I bet you're ugly!"  
+    | bmi <= 30.0 = "You're fat! Lose some weight, fatty!"  
+
+bmiTell2 bmi  = "You're a whale, congratulations!"  
+
+-- Very artificial example to demo patterns, guards
+listeg:: Integral t => [t] -> [Char]
+listeg [] = "Empty List"
+listeg [n] = "One Item"
+listeg [x,y] = "Two Items"
+listeg [x,y,z] = "Three Items"
+listeg xs
+    | length(xs) == 4 = "Four Items"
+    | length(xs) == 5 = "Five Items"
+listeg (x:xs)
+    | (length(xs)+1) == 6 = "Six Items"
+    | otherwise = "More than Six items!!!"
+
+
+-- My first example of a where binding
+initials :: String -> String -> String  
+initials firstname lastname = [f] ++ ". " ++ [l] ++ "."  
+    where (f:_) = firstname  
+          (l:_) = lastname    
+
+
+-- You can also create functions in the where
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
+calcBmis xs = [bmi w h | (w, h) <- xs]  
+    where bmi weight height = weight / height ^ 2  
+
+myFunc:: Integral t => t -> t
+myFunc x =  myFuncHelper1 x -- NOTE myFuncHelper2 is not visible in myFunc
+    where myFuncHelper1 y = myFuncHelper2(y*y) where myFuncHelper2 z = z + 2
+
+myFunc2:: Integral t => t -> t
+myFunc2 x =  myFuncHelper2 (myFuncHelper1 x) where 
+    myFuncHelper1 y = (y*y)
+    myFuncHelper2 z = z + 2   -- The syntax here appears very messy though. The two wheres have to line up exactly??
+
+myFunc3:: Integral t => t -> t
+myFunc3 x =  myFuncHelper1 x where 
+    myFuncHelper1 y = myFuncHelper2(y*y) where 
+        myFuncHelper2 z = z + 2
+
+
+-- where clauses are in scope across all guards in a function
+msg n
+    | n == 1 = "One!!" ++ helloWorld
+    | n == 2 = "Two!!" ++ helloWorld
+    | n == 3 = "Three!!" ++ helloWorld
+    | otherwise = "Did not match Hello anyway!"
+    where
+        helloWorld = "Hello World"  
+
+-- let clauses are similar to where but more local
+-- they can not span across guards
+myFunc4:: Integral t => t -> t
+myFunc4 x =  
+    let myFuncHelper1 y = myFuncHelper2(y*y) 
+        myFuncHelper2 z = z + 2
+    in myFuncHelper1 x 
+
+
+-- case expressions
+-- NOTE: We could do the same with function patterns and/or guards but case expressions can be used anywhere
+headTest :: [a] -> a  
+headTest xs = 
+    case xs of 
+        [] -> error "No head for empty lists!"  
+        (x:_) -> x  
+
+
+-- More recursive examples from the tutorial
+-- This is similar to my firstN above but not as complicated
+-- Probably not as good though because in FirstN I was using the accumulatorPattern with tailRecursion
+-- WRONG: This is a lot quicker than my FirstN
+-- It will actually work with length $ testTake 1000000
+take' :: (Num i, Ord i) => i -> [a] -> [a]  
+take' n _  
+    | n <= 0   = []  
+take' _ []     = []  
+take' n (x:xs) = x : take' (n-1) xs  
+
+testFirstN n = length $ firstN [1..] n
+
+testTake n = length $ take' n [1..]
+
+-- What is the problem with firstN. Let's try re-writing
+-- It is the length call that is slowing it down.
+-- The below version is much better but still not quite as fast as take'
+firstN2' :: (Integral t) => [t] -> Int -> Int -> [t] -> [t]
+firstN2' [] n tmpN resList = resList
+firstN2' (x:xs) n tmpN resList
+    | n == tmpN = resList 
+    | otherwise = firstN2' xs n (tmpN+1) (x:resList)
+
+firstN2 xs n =
+    reverse (firstN2' xs n 0 [])
+
+
+testFirstN2 n = length $ firstN2 [1..] n
+
+-- *********************************************************
+-- Pipeline
+
+-- Let's try and create a simple pipline
+
+sumLists::(Integral t)=>[t]->[t]->[t]
+sumLists l1 l2 =
+    let
+        step1 = map (+3) l1
+        step2 xs = map (*2) xs
+        in
+            step2 step1
+
+
+sumLists2::(Integral t)=>[t]->[t]->[t]
+sumLists2 l1 l2 =
+    let
+        step1 = map (+3) 
+        step2 = map (*2) 
+        in
+            step2.step1 $ l1
+
+sumLists3::(Integral t)=>[t]->[t]->t
+sumLists3 l1 l2 =
+    let
+        step1 = map (\(x,y)->x+y) 
+        step2 = head
+        step3 x = (x+7) 
+        step3b = (+7) -- step3 and step3b are identical 
+        in
+            step3.step2.step1 $ zip l1 l2
+
+sumLists4::(Integral t)=>[t]->[t]->t
+sumLists4 l1 l2 =
+    step3.step2.step1 $ zip l1 l2
+    where
+        step1 = map (\(x,y)->x+y) 
+        step2 = head
+        step3 x = (x+8) 
+
+sumLists5::(Integral t)=>[t]->[t]->[t]
+sumLists5 l1 l2 =
+    -- (step2.step1) (zip l1 l2) -- This works
+    --step2.step1 zip l1 l2 -- Doesn't work
+    --(step2.step1) zip l1 l2 -- Doesn't work
+    step2.step1 $ zip l1 l2 -- works
+    where
+        step1 = map (\(x,y)->x+y) 
+        step2 = map (*2)
+
+sumLists6::(Integral t)=>[t]->[t]->[t]
+sumLists6 l1 l2 =
+    (step2.step1)  dataFeed
+    where
+        someConst = 3   -- wasn't sure if you would be able to do this because it rules out where clauses being executed in parallel
+        dataFeed = zip l1 l2
+        step1 = map (\(x,y)->x+y) 
+        step2 = map (*someConst)
+
+
+sumLists7::(Integral t)=>[t]->[t]->[t]
+sumLists7 l1 l2 =
+    let
+        someConst = 3   -- Just testing allowed here as well
+        dataFeed = zip l1 l2
+        step1 = map (\(x,y)->x+y) 
+        step2 = map (*someConst)
+        in 
+            (step2.step1)  dataFeed
+
+
+
+
+
+
 
 
 
