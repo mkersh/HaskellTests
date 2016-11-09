@@ -89,7 +89,7 @@ numDigits' x acc = numDigits' (x `div` 10) (acc+1)
 numDigits x = numDigits' x 0
 
 -- The accumulator pattern that I have used above is very important in functional/declarative programming.
--- I do remeber this from my prolog days (almost 30 years ago!)
+-- I do remember this from my prolog days (almost 30 years ago!)
 
 
 -- Just found another method on google for calculating fib. The author claims it is very quick and can calculate fib 10^1000 in less than 1 secs
