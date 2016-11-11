@@ -90,6 +90,15 @@ foldtest6 = foldl1 (+) [1,2,3,4,5,6,7,8]
 head' :: [a] -> a  
 head' = foldr1 (\x _ -> x) 
 
+-- ************************************
+-- scanl and scanr
+-- similar to foldl and foldr but report all intermediate results as a list
+
+scantest1 = scanl (+) 0 [1,2,3,4,5,6,7,8,9,10]
+
+scantest2 = scanl1 (+) [1,2,3,4,5,6,7,8,9,10]
+
+
 
 
 
