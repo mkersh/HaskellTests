@@ -320,6 +320,50 @@ fn1 = head.(map (+2))
 fn2:: Int -> Int
 fn2 = (*3)
 
+-- Newton Raphson squareroot algorithm
+-- ai+1 = (ai + n/ai) / 2
+--
+-- NOTE: Originally I was missing the typeclass Eq and this was causing a whole load of issues. Basically preventing me terminating the
+-- list using either an if .. then ..else as in the case of sqr or using guards as in the case of sqr'.
+sqr :: (Fractional t, Eq t) => t -> [t]
+sqr n = n : (f n n) 
+    where 
+        f :: (Fractional t, Eq t) => t -> t -> [t] -- You don't actally need this explicit definition of f here
+        f p x = if p/=nextTerm then nextTerm : f nextTerm x else [nextTerm] 
+            where
+                nextTerm = (p + x/p)/2
+
+
+
+-- Don't need the below anymore because sqr should no longer be infinite
+sqr1 n = take' 10 (sqr n)
+
+
+-- Let's try and write a version of sqr with guards
+sqr' :: (Fractional t, Eq t) => t -> [t]
+sqr' n = n : (f n n) 
+    where 
+        f p x 
+            | p/=nextTerm = nextTerm : f nextTerm x
+            | otherwise = [nextTerm]
+            where
+                nextTerm = (p + x/p)/2
+
+
+-- sqr and sqr' above are sequences converging in on the suare root of a number.
+-- The next function returns the actual square root from out of one of these sequences
+-- NOTE: I am assuming here these my square root sequences do always converge to an answer. I haven't found one that doesn't yet.
+sqlRoot n = (reverse (sqr' n)) !! 0
+
+sqlRoot' n = (reverse.sqr') n !! 0
+
+testFrac :: (Fractional t, Eq t) => t -> String
+testFrac f = if f == 1 then "Its Equal" else "Its NOT Equal"
+
+
+
+
+
 
 
 
