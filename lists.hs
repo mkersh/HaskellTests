@@ -98,6 +98,16 @@ scantest1 = scanl (+) 0 [1,2,3,4,5,6,7,8,9,10]
 
 scantest2 = scanl1 (+) [1,2,3,4,5,6,7,8,9,10]
 
+-- ************************************
+-- Prime generator from www.haskell.org fron page
+--
+
+primes = filterPrime [2..] 
+  where filterPrime (p:xs) = 
+          p : filterPrime [x | x <- xs, x `mod` p /= 0]
+
+          
+
 
 
 

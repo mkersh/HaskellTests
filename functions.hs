@@ -362,6 +362,22 @@ testFrac f = if f == 1 then "Its Equal" else "Its NOT Equal"
 
 
 
+-- ************************************
+-- Prime generator from www.haskell.org fron page
+--
+
+-- I struggled to understand the below at first. When you come from an iterative background the concepts that are at play here
+-- are quite daunting. Lazy evaluation is key to how this works.
+--
+-- explanation:
+-- 1) filterPrime is passed an infinite list where head list is the last prime and tail list has been filtered to remove all previous primes before head one
+-- 2) The only reason this works is because of the power of lazy evaluation. When you come to generate the next p think of it as applying all the previous
+--    predicates.
+--
+primes = filterPrime [2..] 
+  where filterPrime (p:xs) = 
+          p : filterPrime [x | x <- xs, x `mod` p /= 0]
+
 
 
 
