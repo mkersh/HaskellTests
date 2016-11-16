@@ -8,9 +8,6 @@ io1 = do
        inpStr <- getLine
        putStrLn $ "Welcome to Haskell, " ++ inpStr ++ "!"
 
-
-
-
 main :: IO ()
 main = do 
        inh <- openFile "input.txt" ReadMode
