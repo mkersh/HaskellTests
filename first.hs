@@ -1,4 +1,4 @@
--- My experiments in Heskell whilst following the Tutorial: http://learnyouahaskell.com/starting-out
+-- My experiments in Haskell whilst following the Tutorial: http://learnyouahaskell.com/starting-out
 
 -- ************************************************************************************
 -- ********* First experiments with functions
@@ -14,10 +14,10 @@ doubleSmallNumber x =
 -- Funny characters in names
 conanO'Brien = "It's a-me, Conan O'Brien!"  
 
--- Functions without parameters of names. They are constant though
+-- Functions without parameters are names. They are constant though
 
 mark1 = "This is it"
--- In Heskell or any pure functional programming language names onces declared are immutable
+-- In Haskell or any pure functional programming language names onces declared are immutable
 -- So we would not beable to overload mark1. The below if you comment out will cause an error
 --mark1 = "This is it redefined" 
 
