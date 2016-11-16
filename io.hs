@@ -147,3 +147,22 @@ io6 =
     str2action "Done!"
 
 
+-- *****************************************
+-- >> and >>= operators
+-- These operators provide an alternative to do blocks to combine actions together
+-- This is not a good enough reason though I'm sure there will be other advantages or reasons to use them over a do block
+
+-- With >> the left action is executed for side effects and then the right action is run and results returned from this
+io7 =  putStrLn "action one" >> putStrLn "action two"
+
+-- with >>= th result of the first is passed to the second
+io8 = getLine >>= putStrLn
+
+-- You can think of them as a pipeline
+io9 = putStrLn "action one" >> 
+      putStrLn "action two" >>
+      putStrLn "Now type some text and I will reflect it" >>
+      getLine >>= 
+      putStrLn
+
+
