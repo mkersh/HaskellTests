@@ -148,6 +148,8 @@ io6 =
 -- >> and >>= operators
 -- These operators provide an alternative to do blocks to combine actions together
 -- This is not a good enough reason though I'm sure there will be other advantages or reasons to use them over a do block
+-- Maybe not - apparently a do block gets translated into >> and >>=. So maybe it really is just alternative syntax sugar and you 
+-- pick and choose your preference
 
 -- With >> the left action is executed for side effects and then the right action is run and results returned from this
 io7 =  putStrLn "action one" >> putStrLn "action two"
