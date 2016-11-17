@@ -122,7 +122,6 @@ ziptest2 = zip [1..] [1..]
 -- Rather than combine into a tuple you can use zipWith and choose the function you want to combine with
 ziptest3 = zipWith (+) [1,2,3,4,5] [1,2,3,4]
 
-
 -- Alternative version of ziptest3 which is probably easier to read
 -- This one uses an anonymous lambda functions to make it more explicit that the 2nd param to zipWith is a function taking two parameters
 ziptest4 = zipWith (\x y-> x+y) [1,2,3,4,5] [1,2,3,4]
