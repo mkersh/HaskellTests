@@ -217,6 +217,9 @@ bail err = Parse $ \s -> Left $
 
 (==>) :: Parse a -> (a -> Parse b) -> Parse b
 firstParser ==> secondParser  =  Parse chainedParser
+  -- The thing that is confusing me is how the initState gets through into the chainedParser.
+  -- I think I am over thinking this though.
+  -- This ==> operator returns a higher order function (albeit wrapped in a type) and this takes a ParserState as a param
   where chainedParser initState   =
           case runParse firstParser initState of
             Left errMessage ->
