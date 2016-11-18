@@ -211,6 +211,15 @@ getState = Parse (\s -> Right (s, s))
 putState :: ParseState -> Parse ()
 putState s = Parse (\_ -> Right ((), s))
 
+-- The next section is me making changes from the example in the book
+-- Just want to add another Parse stage to make sure I am beginning to understand what's going on here
+mkState :: Parse ()
+-- Just found out you can't use a where inside a lambda. So had to use let instead
+mkState = Parse (\initState -> let nextState = initState { string = (L8.pack "HELLO")} in Right ((), nextState))
+parseByte2 :: Parse Word8
+parseByte2 = mkState ==> (\_ -> parseByte)
+
+
 bail :: String -> Parse a
 bail err = Parse $ \s -> Left $
            "byte offset " ++ show (offset s) ++ ": " ++ err
@@ -227,5 +236,5 @@ firstParser ==> secondParser  =  Parse chainedParser
             Right (firstResult, newState) ->
                 runParse (secondParser firstResult) newState
 
-testparse3 = parse parseByte (L8.pack "foo")
+testparse3 = parse parseByte2 (L8.pack "foo")
 
