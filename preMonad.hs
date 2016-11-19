@@ -5,6 +5,7 @@ parse a binary data format that it claims is essential to understand the need fo
 This file are my experiments with the code in this chapter.
 
 NOTE: I am not expecting this to be easy though. The book has many comments from people who found this chapter extremely difficult.
+UPDATE: I got through this after experimenting with it for about 2 days. It was a bruising battle but I feel good about it now.
 -}
 
 import qualified Data.ByteString.Lazy.Char8 as L8
