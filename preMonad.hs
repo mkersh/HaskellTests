@@ -412,3 +412,19 @@ ft4 con = fmap
   (\x -> case () of
     _ | x > 10 -> "Bigger than 10"
       | otherwise -> "less than 10"  ) con
+
+nestList1 = [ [1,2,3], [4,5,6], [7,8,9]]
+-- This is a simple example of what they did in the parser above (in a few places).
+-- To get to the actual numbers we have to lift twice (i.e. apply fmap twice)
+-- The first fmap i.e. the <$> pulls out the [1,2,3] ... lists
+-- The second one then iterates over the items adding 2 to each
+nlTest = fmap (+2) <$> nestList1
+
+-- If your lists are 3 levels deep. 
+nestList2 = [ [[1,2,3], [4,5,6], [7,8,9]], [[11,12,13], [14,15,16], [17,18,19]]] 
+-- You've guessed it you have to apply fmap 3 times to get to the integers
+-- It's a bit sensitive regarding syntax as well need to seperate the two <$> with brackets else you get an error
+nlTest2 = (fmap (+2) <$>) <$> nestList2
+-- The below acheives the same different syntax
+nlTest3 = (fmap (fmap (fmap (+2)))) nestList2
+
