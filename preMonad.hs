@@ -385,6 +385,30 @@ parseBytes n =
        identity h
 
 
+-- ***********************************************************
+-- Some more experiments with Functors and their fmap function
+-- There was a lot of talk in chapter 10 RWH of using fmap to lift values out of a container to apply a function to them
+
+mb1 = Just 34 :: Maybe Int
+mb2 = Nothing :: Maybe Int
+mb3 = Just 5 :: Maybe Int
+ei1 = Left 1 :: Either Int String  -- You can't fmap over Either
+
+-- So what fmap allows you to do is lift values out of a container (Maybe container in this case), apply a function to them
+-- and then put back into the original container (possibly as a different type - not in this case though)
+ft1 = (+2) <$> mb1  -- Using the abbreviated  operator syntax for fmap
+ft2 = fmap (+2) mb2 -- Using the standard syntax
+
+-- Having problems trying to create an alias for an fmap operation
+-- You have to explicitly define the type (you dont't in ghci though)
+-- and I can't get it to return something different from a. Whereas a functor can do??
+ft3::(Num a, Num b, Functor f) => f a -> f a
+ft3 = fmap (+2)
 
 
-
+-- Learnt the case () trick from http://stackoverflow.com/questions/3416475/haskell-guards-on-lambda-functions
+ft4::(Num a, Ord a, Functor f) => f a->f [Char]
+ft4 con = fmap
+  (\x -> case () of
+    _ | x > 10 -> "Bigger than 10"
+      | otherwise -> "less than 10"  ) con
