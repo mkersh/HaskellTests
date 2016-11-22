@@ -4,6 +4,9 @@ divBy::Integer -> Integer -> Err Integer
 divBy 0 y = Error
 divBy x y = OK (div y x)
 
+addTo::Integer -> Integer -> Err Integer
+addTo x y = OK (x + y)
+
 temp = divBy 5 `composeErr` divBy 0
 temp1 = temp 2310
 
@@ -18,6 +21,8 @@ main = do
             print ((divBy 1 `composeErr` temp) 2310)
             print ((divBy 2 `composeErr` divBy 1 `composeErr` divBy 5 `composeErr` divBy 0) 2310)
             print ((divBy 2 `composeErr` temp2) 2310)
+            -- The result of this next one is different from when we compose left to right (see failure2.hs)
+            print ((addTo 10 `composeErr` addTo 11 `composeErr` divBy 5) 100)
             
             -- The following will not compile
             --print ((divBy 1 `composeErr` temp1))
