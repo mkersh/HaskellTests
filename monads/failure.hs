@@ -52,3 +52,7 @@ composeErr :: (b-> Err c) -> (a->Err b) -> (a-> Err c)
 composeErr f g x = case g x of
                     OK y -> f y
                     Error -> Error
+
+-- We don't need the identity function below BUT for monads in general you need to define this
+idErr :: a -> Err a
+idErr x = OK x
