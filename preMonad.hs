@@ -425,6 +425,6 @@ nestList2 = [ [[1,2,3], [4,5,6], [7,8,9]], [[11,12,13], [14,15,16], [17,18,19]]]
 -- You've guessed it you have to apply fmap 3 times to get to the integers
 -- It's a bit sensitive regarding syntax as well need to seperate the two <$> with brackets else you get an error
 nlTest2 = (fmap (+2) <$>) <$> nestList2
--- The below acheives the same different syntax
+-- The below achieves the same - different syntax
 nlTest3 = (fmap (fmap (fmap (+2)))) nestList2
 
