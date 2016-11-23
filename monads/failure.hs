@@ -62,8 +62,19 @@ composeErr f g x = case g x of
 idErr :: a -> Err a
 idErr x = OK x
 
+-- ******************************************************************
+-- Making the above into a proper haskell monad
+
 bindErr :: (Err a) -> (a -> Err b) -> (Err b)
+-- Took me a while to understand how we can make bindErr from composeErr BUT think I have got it now
+-- The right function passed into composeErr is actually a dummy function that just returns whatever is passed into it
+--      This allows us to pass an (Err a) as an argument and it will return this as is
+-- Surely this can not be very efficient though. Every bind is performing a useless function call
 bindErr e f = (composeErr f id) e
+
+-- Some tests I used to understand how bindErr can be made up of composeErr
+testBind = bindErr (OK 8) (divBy 2)
+testBind2 = (composeErr (divBy 2) id )
 
 -- Trying to make this an official haskell monad
 -- Originally all you had to do was 
@@ -97,4 +108,13 @@ testMonad2 = do
     x <- (divBy 0) 400
     y <- (divBy 3) x
     (return y)
+
+-- print ((addTo 10 `composeErr` addTo 11 `composeErr` divBy 5) 100)
+-- Here's how to call without the do syntax sugar
+-- What is slightly surprising here is the the order of evaluation is from left to right. Whereas our composeErr above was right to left
+-- Is this because of the precedence of the operator or is it just because of the way we have flipped the arguments around in bindErr
+-- (>>=) has infixl 1 >>=
+-- I don't think it is precedence
+testMonad3 = 
+    (divBy 5 100) >>= (addTo 11) >>= (addTo 10) 
 

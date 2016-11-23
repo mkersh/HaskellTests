@@ -81,6 +81,10 @@ testMonad = do
     y <- (Output "Hello World") (return x)
     (Output y) (return x)
     -- This wait is not waiting
-    Wait (\s -> (Return s))
+    g <- Wait (\s -> (Return s))
+    (Output g) (return x)
     (return y)
+
+-- If you execute the monad it starts to make more sense
+printMonad = runIO testMonad
 
