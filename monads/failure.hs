@@ -1,5 +1,10 @@
 module Failure where
 
+-- These imports are not needed for the main test here, just at the end where we show 
+-- how you can convert our composition function into an official haskell monad
+import Control.Applicative -- Otherwise you can't do the Applicative instance.
+import Control.Monad (liftM, ap)
+
 divBy::Integer -> Integer -> Err Integer
 divBy 0 y = Error
 divBy x y = OK (div y x)
@@ -56,3 +61,40 @@ composeErr f g x = case g x of
 -- We don't need the identity function below BUT for monads in general you need to define this
 idErr :: a -> Err a
 idErr x = OK x
+
+bindErr :: (Err a) -> (a -> Err b) -> (Err b)
+bindErr e f = (composeErr f id) e
+
+-- Trying to make this an official haskell monad
+-- Originally all you had to do was 
+instance Monad Err where
+    return x = idErr x
+    (>>=) = bindErr
+
+-- BUT You now need to support the Functor and Applicative classtype as well. This came into play since GHC 7.10
+-- There are a lot of tutorials that no longer compile because of this. Including the one I was using.
+-- See http://stackoverflow.com/questions/31652475/defining-a-new-monad-in-haskell-raises-no-instance-for-applicative
+
+-- The below are generic definitions of these that work for any monad (so I am told)
+instance Functor Err where
+  fmap = liftM
+
+-- Again this is just a generic definition that works for any monad. See link above for details
+instance Applicative Err where
+  pure  = return
+  (<*>) = ap
+
+-- Not really sure yet how to use the official monad syntax. 
+-- Got the basics working with the following
+testMonad = do
+    x <- (divBy 2) 400
+    y <- (divBy 3) x
+    (return y)
+
+-- This next one shows the error getting propagated down the chain
+-- Remember that the do syntax is just syntactic sugar, each line results in the bind operator >>= being called, which links to our composeErr 
+testMonad2 = do
+    x <- (divBy 0) 400
+    y <- (divBy 3) x
+    (return y)
+

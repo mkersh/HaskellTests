@@ -35,7 +35,7 @@ insert x (Tree y leftTree rightTree)
     | otherwise = Tree y leftTree (insert x rightTree)
 
 -- It was not that difficult afterall and IMO looks nicer than mutable versions
--- Both immutable implementations like this one and mutable ones (like my python one) have same asymptotic performance characteristics
+-- Both immutable implementations like this one and mutable ones (like my python one) have the same asymptotic performance characteristics
 -- For insertion these are:
 -- Worst Case: O(n)
 -- Best Case: O(log n)

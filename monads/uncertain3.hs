@@ -30,8 +30,14 @@ main = do
 
 type P a = [a]
 
+-- We define compose but don't actually use it!!!
 composeP :: (b -> P c) -> (a -> P b) -> (a -> P c)
 composeP f g x = [z | y <-g x, z <- f y] 
+-- Another way of writing compose
+--composeP f g x = h (g x)
+--                where
+--                    h [] = []
+--                    h (y:ys) = (f y) ++ (h ys)
 
 idP :: a -> P a
 idP x = [x]

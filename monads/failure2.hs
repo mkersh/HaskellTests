@@ -3,6 +3,9 @@ as oppose to right to left in the previous example
 -}
 module Failure where
 
+import Control.Applicative -- Otherwise you can't do the Applicative instance.
+import Control.Monad (liftM, ap)
+
 divBy::Integer -> Integer -> Err Integer
 divBy 0 y = Error
 divBy x y = OK (div y x)
@@ -38,3 +41,7 @@ composeErr f g x = case f x of
 -- So that tells us it is right-left
 -- i.e. (f1.f2.f3) x  - f3(x) will be executed first then f2, then f1
 -- BUT the composition functions (i.e (.)) will always be executed left-right 
+
+idErr :: a -> Err a
+idErr x = OK x
+
