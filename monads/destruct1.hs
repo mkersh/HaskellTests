@@ -69,11 +69,12 @@ instance Applicative IOAction where
 -- Turned out all I had to do in the end was (IOAction a)
 instance Show (IOAction a) where
     show (Output s n) = "IOAction Output - " ++ s ++ "\n" ++ show n
-    show (Wait _) = "IOAction Wait \n"
+    show (Wait f) = let x = (f "hello") 
+                        in "IOAction Wait \n"
     show (Return _) = "IOAction Return - \n" 
 
 -- I am really not sure what the purpose of this destructive monad is??
--- It is a little clearer after I made it into a real haskell monad and wrote the testMonad below BUT still not convinced
+-- It is a little clearer after I made it into a real haskell monad and wrote the testMonad below BUT I still don't know what the purpose is for this
 testMonad = do
     a1 <- (Output "One at front gets printed" (Return ()))
     x <- (Output "Foo" (Return "FooStr"))
