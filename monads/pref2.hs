@@ -9,6 +9,7 @@ module Dependence where
 main = putStrLn(f "foo" 5)
     where f = left `composePref` right `composePref` right
 
+-- In mathematical terms the below are referred to as Kleisli arrows
 left :: String -> Pref String
 -- The change here is that left is now a higher order function
 -- It needs to be passed an extra parameter which is the config information
@@ -52,3 +53,9 @@ composePref f g x = \c -> let y = (g x) c
 -- Again in our example we do not need the identify function but for monads this needs to be defined
 idPref :: a -> Pref a
 idPref x = \_ -> x
+
+
+-- Composition test
+compTest::Integer->Integer->Integer
+compTest = (+).(+3).(+4).(+5)
+
