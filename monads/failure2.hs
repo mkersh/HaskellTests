@@ -3,9 +3,6 @@ as oppose to right to left in the previous example
 -}
 module Failure where
 
-import Control.Applicative -- Otherwise you can't do the Applicative instance.
-import Control.Monad (liftM, ap)
-
 divBy::Integer -> Integer -> Err Integer
 divBy 0 y = Error
 divBy x y = OK (div y x)

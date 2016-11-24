@@ -26,6 +26,7 @@ data IOAction a = Output String (IOAction a)
                 | Wait (String-> IOAction a)
                 | Return a -- deriving (Eq, Show) -- You cannot simply derive show for this type
 
+-- runIO is a bit confusing because it is an interpreter for our IOAction monad but we implement it using the IO monad primatives
 runIO :: IOAction a -> IO a
 runIO (Output s n) = do {putStrLn s; runIO n}
 runIO (Wait f) = do {s <- getLine; runIO (f s)}
