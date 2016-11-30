@@ -95,6 +95,8 @@ six = (\f->(\x->f (f (f (f (f (f x)))))))
 seven = (\f->(\x->f (f (f (f (f (f (f x))))))))
 eight = (\f->(\x->f (f (f (f (f (f (f (f x)))))))))
 nine = (\f->(\x->f (f (f (f (f (f (f (f (f x))))))))))
+ten = numSUCC(nine)
+eleven = numSUCC(ten)
 
 -- This will output results for us in human readable form
 -- This is obviously not using pure lambda calculus BUT merely a way to visualise Church numerals
@@ -109,6 +111,19 @@ numIt0 x = '1':x
 printNUM n = 
     n numIt 0
 numIt x = 1 + x
+
+-- *****************************************
+-- Successor function
+-- Don't over analyse the following. Beta-reduce inner (n f x) which results in original number n
+-- Then we add an f to the front
+numSUCC = \n->(\f->(\x->f (n f x)))
+
+-- *******************************************
+-- ADDITION
+--
+-- The big one. Once we have this everything else should follow
+
+numADD = \n->(\m->(\f->(\x->n f (m f x))))
 
 
 
