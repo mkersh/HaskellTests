@@ -1,3 +1,5 @@
+-- From one of Ellie's A level maths questions Nov 2016
+
 f x = 2 / (4*(x^2)-1)
 
 seq1 = [ f x | x<-[2,3..]]
