@@ -1,6 +1,7 @@
 {-
 Just a quick experiment to see how quickly I can create a matrix multiplication function
 -}
+--import Data.Either -- already loaded in Prelude
 
 -- Initially we will just use nested lists to represent a matrix
 
@@ -43,6 +44,9 @@ matrix10 = [[1, 5, 9, 13],
             [3, 7, 11, 15],
             [4, 8, 12, 16]]
 
+matrix11 = [ [1, 2, 3, 4],
+             [1, 2, 3, 4]]
+
 --matrixMULT m n =
 transpose m = 
     transposeAux m 0 (length m)
@@ -78,8 +82,12 @@ matrixMULTStr n m =
     multAllRows (singleRowBStr) n (transpose m)
 
 -- This is the real matrix multiplication function
+matrixMULT :: Num t => [[t]] -> [[t]] -> Either String [[t]]
 matrixMULT n m = 
-    multAllRows (singleRowB) n (transpose m)
+    let valid = checkSizes n m in
+        if valid then Right (multAllRows (singleRowB) n (transpose m)) else Left "Array sizes incompatible!!!!"
+
+checkSizes (ax:_) b = if length(ax) /= length(b) then False else True
 
 -- We will make multAllRows and singleRowA generic so that it can work on matrices with different types of elements
 multAllRows f [] _ = []
